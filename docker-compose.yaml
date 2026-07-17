@@ -1,11 +1,11 @@
 services:
   angular-app:
-    image: angular-app-devops
+    image: nouran10/angular-app-devops
     container_name: angular-app
     ports:
       - "0.0.0.0:4200:80"
   spring-app:
-    image: spring-app-formation
+    image: nouran10/spring-app-formation
     container_name: spring-app
     ports:
       - "0.0.0.0:8081:8081"

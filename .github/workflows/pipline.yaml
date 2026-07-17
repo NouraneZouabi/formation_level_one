@@ -30,13 +30,13 @@ jobs:
 
         - name: Build and Push Backend Docker image 
           run: |
-            docker build -t ${{ vars.DOCKERHUB_USERNAME }}/spring-app springboot/app
-            docker push ${{ vars.DOCKERHUB_USERNAME }}/spring-app 
+            docker build -t ${{ vars.DOCKERHUB_USERNAME }}/spring-app-formation springboot/app
+            docker push ${{ vars.DOCKERHUB_USERNAME }}/spring-app-formation
 
         - name: Build and Push Frontend Docker image 
           run: |
-            docker build -t ${{ vars.DOCKERHUB_USERNAME }}/angular-app angular-app
-            docker push ${{ vars.DOCKERHUB_USERNAME }}/angular-app 
+            docker build -t ${{ vars.DOCKERHUB_USERNAME }}/angular-app-devops angular-app
+            docker push ${{ vars.DOCKERHUB_USERNAME }}/angular-app-devops 
 
         - name: Run with docker compose 
           run: |
