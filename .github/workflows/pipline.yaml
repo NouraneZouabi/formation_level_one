@@ -13,7 +13,7 @@ jobs:
            uses: actions/checkout@v6
 
         - name: Build and test Spring boot
-          run: |
+          run: | 
             cd springboot/app
             chmod +x mvnw
             ./mvnw clean package
