@@ -16,6 +16,13 @@ jobs:
       with:
         username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
+    - name: build artifact
+      run: |
+        cd springboot/app
+        chmod +x mvnw
+        ./mvnw clean verify 
+        ./mvnw clean package 
 
     - name: build front-end
       run: |
