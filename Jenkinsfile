@@ -20,16 +20,16 @@ pipeline {
         dir("formation_level_one/springboot/app"){
           sh "mvn clean install "
           sh "mvn clean package "
-          sh "docker build -t nouran10/spring-app . --no-cache"
-          sh "docker push nouran10/spring-app"
+          sh "sudo docker build -t nouran10/spring-app . --no-cache"
+          sh "sudo docker push nouran10/spring-app"
         }
       }
     }
     stage("Générer frontend image "){
       steps {
         dir("formation_level_one/angular-app"){
-          sh "docker build -t nouran10/angular-app . --no-cache"
-          sh "docker push nouran10/spring-app"
+          sh "sudo docker build -t nouran10/angular-app . --no-cache"
+          sh "sudo docker push nouran10/spring-app"
         }
       }
     }
@@ -37,9 +37,9 @@ pipeline {
     stage("Lancement du docker compose "){
       steps {
         dir("formation_level_one/"){
-          sh "docker compose down --volumes "
-          sh "docker compose pull"
-          sh "docker compose up -d "
+          sh "sudo docker compose down --volumes "
+          sh "sudo docker compose pull"
+          sh "sudo docker compose up -d "
         }
       }
   }  
