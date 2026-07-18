@@ -14,6 +14,24 @@ pipeline {
         sh "git clone https://github.com/NouraneZouabi/formation_level_one.git"
       }
     }
+
+    stage("Docker hub login"){
+      steps {
+        withCredentials([
+          usernamePassword(
+            credentialsId: 'dockercrd',
+            usernameVariable: 'DOCKERHUB_USERNAME,
+            passwordVariable: 'DOCKERHUB_TOKEN')
+        ])
+        {
+          sh '''
+            echo "$DOCKERHUB_TOKEN" | docker login \
+                -u "$DOCKERHUB_USERNAME" \
+                --password-stdin
+              '''
+        }
+      }
+    }
     
     stage("Générer backend image "){
       steps {
