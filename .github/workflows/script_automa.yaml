@@ -11,5 +11,17 @@ jobs:
     - name: checkout code 
       uses: actions/checkout@v7
 
-  
+    - name: build front-end
+      run: |
+        docker build -t nouran10/angular-app angular-app
+        docker push  nouran10/angular-app
 
+    - name: build back-end
+      run: |
+        docker build -t nouran10/spring-app springboot/app
+        docker push  nouran10/spring-app
+
+    - name: lancement du docker compose 
+      run: |
+        docker compose up -d 
+        docker compose ps -a 
