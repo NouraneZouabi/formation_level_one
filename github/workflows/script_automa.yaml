@@ -1,5 +1,0 @@
-name: cicd deploy spring angular avec github action 
-
-on: 
-  push:
-    branches: main
