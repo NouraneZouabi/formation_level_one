@@ -7,6 +7,7 @@ pipeline {
       steps {
         deleteDir()
       }
+    }
     
     stage("clone repo"){
       steps {
@@ -41,5 +42,6 @@ pipeline {
           sh "docker compose up -d "
         }
       }
-    }
+  }  
+  }
 }
