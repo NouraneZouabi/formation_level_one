@@ -17,6 +17,19 @@ pipeline {
             }
         }
 
+    stage('Diagnostic Docker Jenkins') {
+        steps {
+            bat '''
+                whoami
+                echo DOCKER_HOST=%DOCKER_HOST%
+                docker version
+                docker info
+                where docker
+                docker context ls
+            '''
+        }
+    }
+    
     stage('Docker Login') {
         steps {
             withCredentials([
