@@ -11,7 +11,7 @@ pipeline {
     
     stage("clone repo"){
       steps {
-        sh "git clone https://github.com/NouraneZouabi/formation_level_one.git"
+        bat "git clone https://github.com/NouraneZouabi/formation_level_one.git"
       }
     }
 
@@ -24,7 +24,7 @@ pipeline {
             passwordVariable: 'DOCKERHUB_TOKEN')
         ])
         {
-          sh '''
+          bat '''
             echo "$DOCKERHUB_TOKEN" | docker login \
                 -u "$DOCKERHUB_USERNAME" \
                 --password-stdin
@@ -36,18 +36,18 @@ pipeline {
     stage("Générer backend image "){
       steps {
         dir("formation_level_one/springboot/app"){
-          sh "mvn clean install "
-          sh "mvn clean package "
-          sh "docker build -t nouran10/spring-app . --no-cache"
-          sh "docker push nouran10/spring-app"
+          bat "mvn clean install "
+          bat "mvn clean package "
+          bat "docker build -t nouran10/spring-app . --no-cache"
+          bat "docker push nouran10/spring-app"
         }
       }
     }
     stage("Générer frontend image "){
       steps {
         dir("formation_level_one/angular-app"){
-          sh "docker build -t nouran10/angular-app . --no-cache"
-          sh "docker push nouran10/spring-app"
+          bat "docker build -t nouran10/angular-app . --no-cache"
+          bat "docker push nouran10/spring-app"
         }
       }
     }
@@ -55,9 +55,9 @@ pipeline {
     stage("Lancement du docker compose "){
       steps {
         dir("formation_level_one/"){
-          sh "docker compose down --volumes "
-          sh "docker compose pull"
-          sh "docker compose up -d "
+          bat "docker compose down --volumes "
+          bat "docker compose pull"
+          bat "docker compose up -d "
         }
       }
   }  
