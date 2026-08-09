@@ -16,18 +16,21 @@ pipeline {
                     url: 'https://github.com/NouraneZouabi/formation_level_one.git'
             }
         }
-    stage("Docker hub login"){
-      steps {
-        withCredentials([
-          usernamePassword(
-            credentialsId: 'docker-hub-creds',
-            usernameVariable: 'DOCKERHUB_USERNAME',
-            passwordVariable: 'DOCKERHUB_TOKEN')
-        ])
-        {
-          bat 'echo %DOCKERHUB_TOKEN% | docker login -u %DOCKERHUB_USERNAME% --password-stdin'
+
+    stage('Docker Login') {
+        steps {
+            withCredentials([
+                usernamePassword(
+                    credentialsId: 'docker-hub-creds',
+                    usernameVariable: 'DOCKERHUB_USERNAME',
+                    passwordVariable: 'DOCKERHUB_TOKEN'
+                )
+            ]) {
+                bat '''
+                    echo %DOCKERHUB_TOKEN% | docker login -u %DOCKERHUB_USERNAME% --password-stdin
+                '''
+            }
         }
-      }
     }
     
     stage("Générer backend image "){
