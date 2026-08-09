@@ -11,7 +11,7 @@ pipeline {
     
     stage("clone repo"){
       steps {
-        bat "git clone https://github.com/NouraneZouabi/formation_level_one.git"
+        bat "git clone git@github.com:NouraneZouabi/formation_level_one.git"
       }
     }
 
