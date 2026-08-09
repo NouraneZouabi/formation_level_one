@@ -3,7 +3,7 @@ name: cicd deploy spring angular avec github action
 on: 
   push:
     branches: main
-jobs:
+jobs: 
   buid_and_deploy:
     runs-on: ubuntu-latest
 
