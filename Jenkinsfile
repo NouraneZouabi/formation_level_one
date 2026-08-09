@@ -24,7 +24,15 @@ pipeline {
             passwordVariable: 'DOCKERHUB_TOKEN')
         ])
         {
-            bat 'echo %TOKEN% | docker login -u %DOCKERHUB_USERNAME% --password-stdin'
+            bat '''
+                echo Username = %DOCKER_USER%
+                if "%DOCKER_TOKEN%"=="" (
+                    echo TOKEN VIDE
+                    exit /b 1
+                ) else (
+                    echo TOKEN PRESENT
+                )
+            '''
         }
       }
     }
