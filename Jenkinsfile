@@ -25,8 +25,13 @@ pipeline {
                     )]) {
                         bat '''
                             echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                            if errorlevel 1 exit /b 1
+                        
                             docker build -t %DOCKER_USER%/angular-app:latest .
+                            if errorlevel 1 exit /b 1
+                        
                             docker push %DOCKER_USER%/angular-app:latest
+                            if errorlevel 1 exit /b 1
                         '''
                     }
                 }
