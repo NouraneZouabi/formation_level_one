@@ -14,7 +14,18 @@ pipeline {
                 bat 'git clone https://github.com/NouraneZouabi/formation_level_one.git'
             }
         }
-
+stage('Debug Docker') {
+    steps {
+        bat '''
+            whoami
+            echo USERPROFILE=%USERPROFILE%
+            where docker
+            docker version
+            docker context ls
+            docker info
+        '''
+    }
+}
         stage('Generate frontend image') {
             steps {
                 dir('formation_level_one/angular-app') {
