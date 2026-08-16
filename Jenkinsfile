@@ -18,23 +18,27 @@ pipeline {
         }
 
     
-    stage('Test Docker Credential') {
-        steps {
-            withCredentials([
-                usernamePassword(
-                    credentialsId: 'dockeer-crd',
-                    usernameVariable: 'DOCKERHUB_USERNAME',
-                    passwordVariable: 'DOCKERHUB_TOKEN'
-                )
-            ]) {
-                bat '''
-                    powershell -Command "$u=$env:DOCKERHUB_USERNAME; Write-Host ('Username length = ' + $u.Length); Write-Host ('Username first char = ' + $u.Substring(0,1))"
-                    docker logout
-                    echo %DOCKERHUB_TOKEN% | docker login -u %DOCKERHUB_USERNAME% --password-stdin
-                '''
-            }
+stage('Test Docker Credential') {
+    steps {
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'docker-test',
+                usernameVariable: 'DOCKERHUB_USERNAME',
+                passwordVariable: 'DOCKERHUB_TOKEN'
+            )
+        ]) {
+            powershell '''
+                $username = $env:DOCKERHUB_USERNAME
+                $token = $env:DOCKERHUB_TOKEN
+
+                Write-Host "Username length: $($username.Length)"
+                Write-Host "Token length: $($token.Length)"
+
+                $token | docker login -u $username --password-stdin
+            '''
         }
     }
+}
     
     stage("Générer backend image "){
       steps {
