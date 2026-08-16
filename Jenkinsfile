@@ -1,85 +1,76 @@
 pipeline {
-  agent any
+    agent any
 
-    
-  stages {
-    stage("clean up"){
-      steps {
-        deleteDir()
-      }
-    }
-    
-    stage('Checkout') {
+    stages {
+
+        stage('Clean up') {
             steps {
-                git branch: 'main',
-                    credentialsId: 'githubcrd',
-                    url: 'https://github.com/NouraneZouabi/formation_level_one.git'
+                deleteDir()
             }
         }
 
-stage('Docker Environment') {
-    steps {
-        powershell '''
-            Write-Host "===== USER ====="
-            whoami
-
-            Write-Host "===== USERNAME ====="
-            $env:USERNAME
-
-            Write-Host "===== DOCKER PATH ====="
-            where.exe docker
-
-            Write-Host "===== DOCKER VERSION ====="
-            docker version
-        '''
-    }
-}
-stage('Test Docker Credential') {
-    steps {
-        withCredentials([
-            usernamePassword(
-                credentialsId: 'dockeer-crd',
-                usernameVariable: 'DOCKERHUB_USERNAME',
-                passwordVariable: 'DOCKERHUB_TOKEN'
-            )
-        ]) {
-            powershell '''
-                Write-Host "Username length: $($env:DOCKERHUB_USERNAME.Length)"
-                Write-Host "Token length: $($env:DOCKERHUB_TOKEN.Length)"
-
-                $env:DOCKERHUB_TOKEN | docker login -u $env:DOCKERHUB_USERNAME --password-stdin
-            '''
+        stage('Clone repo') {
+            steps {
+                bat 'git clone https://github.com/NouraneZouabi/formation_level_one.git'
+            }
         }
-    }
-}
-    
-    stage("Générer backend image "){
-      steps {
-        dir("formation_level_one/springboot/app"){
-          bat "mvn clean install "
-          bat "mvn clean package "
-          bat "docker build -t nouran10/spring-app . --no-cache"
-          bat "docker push nouran10/spring-app"
-        }
-      }
-    }
-    stage("Générer frontend image "){
-      steps {
-        dir("formation_level_one/angular-app"){
-          bat "docker build -t nouran10/angular-app . --no-cache"
-          bat "docker push nouran10/spring-app"
-        }
-      }
-    }
 
-    stage("Lancement du docker compose "){
-      steps {
-        dir("formation_level_one/"){
-          bat "docker compose down --volumes "
-          bat "docker compose pull"
-          bat "docker compose up -d "
+        stage('Generate frontend image') {
+            steps {
+                dir('formation_level_one/angular-app') {
+
+                    withCredentials([usernamePassword(
+                        credentialsId: 'docker-hub-creds',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )]) {
+
+                        bat 'echo %DOCKERHUB_PASSWORD% | docker login -u %DOCKERHUB_USERNAME% --password-stdin'
+
+                        bat 'docker build -t nouran10/myapp-frontend . --no-cache'
+
+                        bat 'docker push nouran10/myapp-frontend'
+                    }
+                }
+            }
         }
-      }
-    } 
-  }
+
+        stage('test sonar') {
+            steps {
+                dir('formation_level_one/springboot/app') {
+                    bat 'set "MAVEN_USER_HOME=C:\\Jenkins\\.m2" && mvnw.cmd clean install'
+                    bat """
+                        mvnw.cmd clean verify sonar:sonar \
+                          -Dsonar.projectKey=deploy-appa \
+                          -Dsonar.host.url=http://54.196.35.185:9000 \
+                          -Dsonar.login=sqp_2c3f83231f1adf1fb169bbd17260bb20b8438a9a 
+                    """
+                }
+            }
+        }
+      
+        stage('Generate backend image') {
+            steps {
+                dir('formation_level_one/springboot/app') {
+
+                    withCredentials([usernamePassword(
+                        credentialsId: 'dockeer-cred',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )]) {
+
+                        bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
+
+                        bat 'set "MAVEN_USER_HOME=C:\\Jenkins\\.m2" && mvnw.cmd clean install'
+
+                        bat 'docker build -t nouran10/myapp-backend . --no-cache'
+
+                        bat 'docker push nouran10/myapp-backend'
+                    }
+                }
+            }
+        }
+
+
+    }
 }
