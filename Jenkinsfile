@@ -28,6 +28,8 @@ pipeline {
                 )
             ]) {
                 bat '''
+                    echo USERNAME = %DOCKERHUB_USERNAME%
+                    echo TOKEN_LENGTH = %DOCKERHUB_TOKEN%
                     echo %DOCKERHUB_TOKEN% | docker login -u %DOCKERHUB_USERNAME% --password-stdin
                 '''
             }
