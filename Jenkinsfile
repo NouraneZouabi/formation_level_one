@@ -19,7 +19,7 @@ stage('Generate frontend image') {
     steps {
         dir('formation_level_one/angular-app') {
             withCredentials([usernamePassword(
-                credentialsId: 'docker-hub-creds',
+                credentialsId: 'dockeer-crd',
                 usernameVariable: 'DOCKER_USER',
                 passwordVariable: 'DOCKER_PASS'
             )]) {
@@ -36,7 +36,7 @@ stage('Generate backend image') {
     steps {
         dir('formation_level_one/spring-app') {
             withCredentials([usernamePassword(
-                credentialsId: 'docker-hub-creds',
+                credentialsId: 'dockeer-crd',
                 usernameVariable: 'DOCKER_USER',
                 passwordVariable: 'DOCKER_PASS'
             )]) {
