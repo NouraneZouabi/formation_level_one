@@ -14,16 +14,28 @@ pipeline {
                 bat 'git clone https://github.com/NouraneZouabi/formation_level_one.git'
             }
         }
-stage('Debug Docker') {
+stage('Test Docker Credentials') {
     steps {
-        bat '''
-            whoami
-            echo USERPROFILE=%USERPROFILE%
-            where docker
-            docker version
-            docker context ls
-            docker info
-        '''
+        withCredentials([usernamePassword(
+            credentialsId: 'docker-hub-creds',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_PASS'
+        )]) {
+            powershell '''
+                Write-Host "User Jenkins:"
+                whoami
+
+                Write-Host "Docker user length:"
+                Write-Host $env:DOCKER_USER.Length
+
+                Write-Host "Docker password length:"
+                Write-Host $env:DOCKER_PASS.Length
+
+                Write-Host "Testing Docker login..."
+
+                $env:DOCKER_PASS | docker login --username $env:DOCKER_USER --password-stdin
+            '''
+        }
     }
 }
         stage('Generate frontend image') {
