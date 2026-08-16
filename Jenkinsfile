@@ -18,7 +18,7 @@ pipeline {
         }
 
     
-    stage('Docker Hub') {
+    stage('Test Docker Credential') {
         steps {
             withCredentials([
                 usernamePassword(
@@ -28,8 +28,8 @@ pipeline {
                 )
             ]) {
                 bat '''
-                    echo USERNAME = %DOCKERHUB_USERNAME%
-                    echo TOKEN_LENGTH = %DOCKERHUB_TOKEN%
+                    powershell -Command "$u=$env:DOCKERHUB_USERNAME; Write-Host ('Username length = ' + $u.Length); Write-Host ('Username first char = ' + $u.Substring(0,1))"
+                    docker logout
                     echo %DOCKERHUB_TOKEN% | docker login -u %DOCKERHUB_USERNAME% --password-stdin
                 '''
             }
