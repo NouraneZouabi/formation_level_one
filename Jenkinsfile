@@ -38,6 +38,29 @@ stage('Test Docker Credentials') {
         }
     }
 }
+
+stage('Verify Docker Credential') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'docker-hub-creds',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_PASS'
+        )]) {
+            powershell '''
+                Write-Host "USERNAME = [$env:DOCKER_USER]"
+                Write-Host "USERNAME LENGTH = $($env:DOCKER_USER.Length)"
+                Write-Host "TOKEN LENGTH = $($env:DOCKER_PASS.Length)"
+
+                $bytes = [System.Text.Encoding]::UTF8.GetBytes($env:DOCKER_PASS)
+                $sha = [System.Security.Cryptography.SHA256]::Create()
+                $hash = $sha.ComputeHash($bytes)
+                $fingerprint = [BitConverter]::ToString($hash).Replace("-", "")
+
+                Write-Host "TOKEN SHA256 = $fingerprint"
+            '''
+        }
+    }
+}
         stage('Generate frontend image') {
             steps {
                 dir('formation_level_one/angular-app') {
