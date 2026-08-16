@@ -17,7 +17,6 @@ pipeline {
             }
         }
 
-    
 stage('Test Docker Credential') {
     steps {
         withCredentials([
@@ -28,13 +27,10 @@ stage('Test Docker Credential') {
             )
         ]) {
             powershell '''
-                $username = $env:DOCKERHUB_USERNAME
-                $token = $env:DOCKERHUB_TOKEN
+                Write-Host "Username length: $($env:DOCKERHUB_USERNAME.Length)"
+                Write-Host "Token length: $($env:DOCKERHUB_TOKEN.Length)"
 
-                Write-Host "Username length: $($username.Length)"
-                Write-Host "Token length: $($token.Length)"
-
-                $token | docker login -u $username --password-stdin
+                $env:DOCKERHUB_TOKEN | docker login -u $env:DOCKERHUB_USERNAME --password-stdin
             '''
         }
     }
