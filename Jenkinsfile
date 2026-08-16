@@ -17,7 +17,7 @@ pipeline {
 
 stage('Generate frontend image') {
     steps {
-        dir('angular-app') {
+        dir('formation_level_one/angular-app') {
             withCredentials([usernamePassword(
                 credentialsId: 'docker-hub-creds',
                 usernameVariable: 'DOCKER_USER',
@@ -34,7 +34,7 @@ stage('Generate frontend image') {
 }
 stage('Generate backend image') {
     steps {
-        dir('spring-app') {
+        dir('formation_level_one/spring-app') {
             withCredentials([usernamePassword(
                 credentialsId: 'docker-hub-creds',
                 usernameVariable: 'DOCKER_USER',
