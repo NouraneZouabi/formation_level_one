@@ -20,12 +20,12 @@ pipeline {
                 dir('formation_level_one/angular-app') {
 
                     withCredentials([usernamePassword(
-                        credentialsId: 'docker-hub-creds',
+                        credentialsId: 'dockeer-cred',
                         usernameVariable: 'DOCKER_USER',
                         passwordVariable: 'DOCKER_PASS'
                     )]) {
 
-                        bat 'echo %DOCKERHUB_PASSWORD% | docker login -u %DOCKERHUB_USERNAME% --password-stdin'
+                        bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
 
                         bat 'docker build -t nouran10/myapp-frontend . --no-cache'
 
