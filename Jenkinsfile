@@ -15,47 +15,40 @@ pipeline {
             }
         }
 
-        stage('Generate frontend image') {
-            steps {
-                dir('formation_level_one/angular-app') {
-
-                    withCredentials([usernamePassword(
-                        credentialsId: 'dockeer-crd',
-                        usernameVariable: 'DOCKER_USER',
-                        passwordVariable: 'DOCKER_PASS'
-                    )]) {
-
-                        bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
-
-                        bat 'docker build -t nouran10/myapp-frontend . --no-cache'
-
-                        bat 'docker push nouran10/myapp-frontend'
-                    }
-                }
+stage('Generate frontend image') {
+    steps {
+        dir('angular-app') {
+            withCredentials([usernamePassword(
+                credentialsId: 'docker-hub-creds',
+                usernameVariable: 'DOCKER_USER',
+                passwordVariable: 'DOCKER_PASS'
+            )]) {
+                bat '''
+                    echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                    docker build -t %DOCKER_USER%/angular-app:latest .
+                    docker push %DOCKER_USER%/angular-app:latest
+                '''
             }
         }
-      
-        stage('Generate backend image') {
-            steps {
-                dir('formation_level_one/springboot/app') {
-
-                    withCredentials([usernamePassword(
-                        credentialsId: 'dockeer-crd',
-                        usernameVariable: 'DOCKER_USER',
-                        passwordVariable: 'DOCKER_PASS'
-                    )]) {
-
-                        bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
-
-                        bat 'set "MAVEN_USER_HOME=C:\\Jenkins\\.m2" && mvnw.cmd clean install'
-
-                        bat 'docker build -t nouran10/myapp-backend . --no-cache'
-
-                        bat 'docker push nouran10/myapp-backend'
-                    }
-                }
+    }
+}
+stage('Generate backend image') {
+    steps {
+        dir('spring-app') {
+            withCredentials([usernamePassword(
+                credentialsId: 'docker-hub-creds',
+                usernameVariable: 'DOCKER_USER',
+                passwordVariable: 'DOCKER_PASS'
+            )]) {
+                bat '''
+                    echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                    docker build -t %DOCKER_USER%/spring-app:latest .
+                    docker push %DOCKER_USER%/spring-app:latest
+                '''
             }
         }
+    }
+}
 
 
     }
