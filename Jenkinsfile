@@ -20,7 +20,7 @@ pipeline {
                 dir('formation_level_one/angular-app') {
 
                     withCredentials([usernamePassword(
-                        credentialsId: 'dockeer-cred',
+                        credentialsId: 'dockeer-crd',
                         usernameVariable: 'DOCKER_USER',
                         passwordVariable: 'DOCKER_PASS'
                     )]) {
@@ -40,7 +40,7 @@ pipeline {
                 dir('formation_level_one/springboot/app') {
 
                     withCredentials([usernamePassword(
-                        credentialsId: 'dockeer-cred',
+                        credentialsId: 'dockeer-crd',
                         usernameVariable: 'DOCKER_USER',
                         passwordVariable: 'DOCKER_PASS'
                     )]) {
