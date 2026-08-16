@@ -17,6 +17,23 @@ pipeline {
             }
         }
 
+stage('Docker Environment') {
+    steps {
+        powershell '''
+            Write-Host "===== USER ====="
+            whoami
+
+            Write-Host "===== USERNAME ====="
+            $env:USERNAME
+
+            Write-Host "===== DOCKER PATH ====="
+            where.exe docker
+
+            Write-Host "===== DOCKER VERSION ====="
+            docker version
+        '''
+    }
+}
 stage('Test Docker Credential') {
     steps {
         withCredentials([
