@@ -22,7 +22,7 @@ stage('Test Docker Credential') {
     steps {
         withCredentials([
             usernamePassword(
-                credentialsId: 'docker-test',
+                credentialsId: 'dockeer-crd',
                 usernameVariable: 'DOCKERHUB_USERNAME',
                 passwordVariable: 'DOCKERHUB_TOKEN'
             )
