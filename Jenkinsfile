@@ -15,19 +15,21 @@ pipeline {
             }
         }
 
-        stage("Docker Login") {
-            steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'docker-hub-creds',
-                        usernameVariable: 'DOCKER_USERNAME',
-                        passwordVariable: 'DOCKERHUB_TOKEN'
-                    )
-                ]) {
-                    bat 'echo %DOCKERHUB_TOKEN% | docker login -u %DOCKER_USERNAME% --password-stdin'
-                }
-	            }
-        }
+		stage("Docker Login") {
+		    steps {
+		        withCredentials([
+		            usernamePassword(
+		                credentialsId: 'docker-hub-creds',
+		                usernameVariable: 'DOCKER_USERNAME',
+		                passwordVariable: 'DOCKERHUB_TOKEN'
+		            )
+		        ]) {
+		            powershell '''
+		                $DOCKERHUB_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
+		            '''
+		        }
+		    }
+		}
 
         stage("Generate frontend image") {
             steps {
