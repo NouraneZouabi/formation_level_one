@@ -12,6 +12,27 @@ pipeline {
                 bat "git clone https://github.com/NouraneZouabi/formation_level_one.git" 
             } 
         } 
+
+       stage('Generate frontend image') {
+            steps {
+                dir('formation_level_one/angular-app') {
+
+                    withCredentials([usernamePassword(
+                        credentialsId: 'docker-hub-creds',
+                        usernameVariable: 'DOCKER_USERNAME',
+                        passwordVariable: 'DOCKERHUB_TOKEN'
+                    )]) {
+
+                        bat 'echo %DOCKERHUB_TOKEN% | docker login -u %DOCKER_USERNAME% --password-stdin'
+
+                        bat 'docker build -t nouran10/myapp-frontend . --no-cache'
+
+                        bat 'docker push nouran10/myapp-frontend'
+                    }
+                }
+            }
+        }
+		
         stage ("Generate frontend image") { 
             steps { 
                  dir("formation_level_one/angular-app"){ 
