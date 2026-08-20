@@ -13,7 +13,7 @@ pipeline {
             } 
         } 
 
-       stage('Generate frontend image') {
+       stage("Generate frontend image") {
             steps {
                 dir('formation_level_one/angular-app') {
 
@@ -22,12 +22,7 @@ pipeline {
                         usernameVariable: 'DOCKER_USERNAME',
                         passwordVariable: 'DOCKERHUB_TOKEN'
                     )]) {
-
-                        bat 'echo %DOCKERHUB_TOKEN% | docker login -u %DOCKER_USERNAME% --password-stdin'
-
-                        bat 'docker build -t nouran10/myapp-frontend . --no-cache'
-
-                        bat 'docker push nouran10/myapp-frontend'
+                       		bat 'echo %DOCKERHUB_TOKEN% | docker login -u %DOCKER_USERNAME% --password-stdin'
                     }
                 }
             }
@@ -37,7 +32,7 @@ pipeline {
             steps { 
                  dir("formation_level_one/angular-app"){ 
                     bat "docker build -t nouran1️0/myapp-frontend . --no-cache" 
-      		    bat "docker push nouran1️0/myapp-frontend" 
+      		    	bat "docker push nouran1️0/myapp-frontend" 
                 }                 
             } 
         } 
