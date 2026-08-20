@@ -44,7 +44,7 @@ pipeline {
         stage("Generate backend image") {
             steps {
                 dir("formation_level_one/springboot/app") {
-                    bat "mvn clean install"
+                    bat 'set "MAVEN_USER_HOME=C:\\Jenkins\\.m2" && mvnw.cmd clean install'
                     bat "docker build -t nouran10/myapp-backend . --no-cache"
                     bat "docker push nouran10/myapp-backend"
                 }
