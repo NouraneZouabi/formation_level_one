@@ -1,9 +1,6 @@
 pipeline { 
     agent any  
-    tools {  
-        maven 'maven' 
-        nodejs 'node' 
-    } 
+
     stages { 
         stage ("Clean up"){ 
             steps { 
@@ -28,7 +25,7 @@ pipeline {
                    dir("formation_level_one/springboot/app"){ 
                       bat "mvn clean install" 
                       bat "docker build -t nouran1️0/myapp-backend . --no-cache" 
-        	      bat "docker push nouran1️0/myapp-backend" 
+        	          bat "docker push nouran1️0/myapp-backend" 
                   }                 
               } 
           } 
@@ -37,7 +34,7 @@ pipeline {
                  dir("formation_level_one"){ 
       			bat "docker compose down --volumes"  
       			bat "docker compose pull" 
-                    	bat "docker compose up -d" 
+                bat "docker compose up -d" 
                 }                 
             } 
 	} 
