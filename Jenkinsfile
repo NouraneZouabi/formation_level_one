@@ -24,8 +24,9 @@ pipeline {
 		                passwordVariable: 'DOCKERHUB_TOKEN'
 		            )
 		        ]) {
-		            powershell '''
-		                $DOCKERHUB_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
+		            bat '''
+		                @echo off
+		                docker login -u "%DOCKER_USERNAME%" --password "%DOCKERHUB_TOKEN%"
 		            '''
 		        }
 		    }
