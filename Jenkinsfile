@@ -50,12 +50,12 @@ pipeline {
                 }
             }
         }
-        stage("Run docker compose") {
+
+        stage("Deploy avec k8s") {
             steps {
                 dir("formation_level_one") {
-                    bat "docker compose down --volumes"
-                    bat "docker compose pull"
-                    bat "docker compose up -d"
+                    bat "kubectl apply -f k8s"
+					bat "kubectl apply -f ingress.yaml"
                 }
             }
         }
