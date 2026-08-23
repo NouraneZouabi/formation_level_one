@@ -59,6 +59,20 @@ pipeline {
                 }
             }
         }
+		
+        stage("sonar test") {
+          steps {
+            dir("formation_level_one/springboot/app") {
+                bat "set MAVEN_USER_HOME=C:\\Jenkins\\.m2&& mvnw.cmd clean install"
+                bat """
+                  mvnw.cmd clean verify sonar:sonar ^
+				  -Dsonar.projectKey=formation_devops ^
+				  -Dsonar.host.url=http://35.170.6.184:9000 ^
+				  -Dsonar.login=sqp_8b7c04cc249e80a03d52ac96310288590415c0bf
+               """
+                 }
+          }
+     }
 
         stage("Deploy") {
             steps {
