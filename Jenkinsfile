@@ -51,6 +51,20 @@ pipeline {
             }
         }
 
+        stage("Test Quality of code with sonarqube ") {
+            steps {
+                dir("formation_level_one/springboot/app") {
+                    bat 'set "MAVEN_USER_HOME=C:\\Jenkins\\.m2" && mvnw.cmd clean install'
+                    bat "
+						mvnw.cmd clean verify sonar:sonar \
+						  -Dsonar.projectKey=formation_devops \
+						  -Dsonar.host.url=http://35.170.6.184:9000 \
+						  -Dsonar.login=sqp_d093f11e5a2337382a016dfb35cdee36f57775ff
+					"
+                }
+            }
+        }
+
         stage("Deploy avec k8s") {
             steps {
                 dir("formation_level_one") {
