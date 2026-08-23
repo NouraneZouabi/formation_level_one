@@ -68,7 +68,7 @@ pipeline {
                   mvnw.cmd clean verify sonar:sonar ^
 				  -Dsonar.projectKey=formation_devops ^
 				  -Dsonar.host.url=http://35.170.6.184:9000 ^
-				  -Dsonar.login=sqp_8b7c04cc249e80a03d52ac96310288590415c0bf
+				  -Dsonar.login=%sonar%
                """
                  }
           }
