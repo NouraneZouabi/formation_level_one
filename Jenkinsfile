@@ -54,8 +54,11 @@ pipeline {
         stage("Deploy avec k8s") {
             steps {
                 dir("formation_level_one") {
-                    bat "kubectl apply -f k8s"
-					bat "kubectl apply -f ingress.yaml"
+					withKubeConfig([ credentialsId: "kubeconfigcred", serverUrl: "http://35.170.6.184:6443"]) {
+						bat " kubectl get nodes "
+	                    bat "kubectl apply -f k8s"
+						bat "kubectl apply -f ingress.yaml"
+					}
                 }
             }
         }
