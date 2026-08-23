@@ -59,5 +59,19 @@ pipeline {
                 }
             }
         }
+
+        stage("Deploy") {
+            steps {
+                dir('formation_level_one/') {
+                    withKubeConfig([credentialsId: 'kubeconfig', serverUrl: 'https://35.170.6.184:6443']) {
+                        bat 'kubectl config view'
+                        bat 'kubectl get nodes'
+                        bat 'kubectl apply -f k8s'
+                        bat 'kubectl apply -f ingress.yaml'
+                    }
+                }
+        }
+    }
+
     }
 }
