@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: spring-app-alerts
+  labels:
+    release: my-kube-prometheus-stack
+spec:
+  groups:
+    - name: spring-app.rules
+      rules:
+      - alert: SpringAppDown
+        expr: up{job="spring-boot-up-service"} == 0
+        for: 1m
+
+        labels:
+          severity: critical
+
+        annotations:
+          summary: "Application Down"
+          description: "L'application spring boot est indisponible"
